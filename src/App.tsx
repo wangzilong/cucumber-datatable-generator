@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const DEFAULT_JSON = '{\n  "id": 1,\n "name": "James",\n "client": {\n   "client_id" : 8900, \n   "account_holders": ["James", "Neo"] \n  } \n}';
+const DEFAULT_JSON = '{\n "name": "James",\n "email": null,\n "client": {\n   "client_id" : 8900, \n   "account_holders": ["James", "Neo"],\n   "flags": null\n  } \n}';
 
 function App() {
   const [json, setJson] = useState<string | undefined>(DEFAULT_JSON);
@@ -50,7 +50,7 @@ function App() {
     } else {
       const h = Object.entries(j).map(e => {
         const header = parent ? `${parent}.${e[0]}` : e[0];
-        if (isArray(e[1])) {
+        if (isArray(e[1]) || !e[1] ) {
           return header;
         } else if ("object" === typeof e[1]) {
           return getHeader(e[1], header);
@@ -70,7 +70,7 @@ function App() {
     } else {
       const h = Object.entries(j).map(e => {
         const header = parent ? `${parent}.${e[0]}` : e[0];
-        if (isArray(e[1])) {
+        if (isArray(e[1]) || !e[1]) {
           return `<${header}>`;
         } else if ("object" === typeof e[1]) {
           return getExample(e[1], header);
@@ -92,6 +92,8 @@ function App() {
         if (isArray(e[1]) && e[1]) {
           // @ts-ignore
           return e[1]?.join(',');
+        } else if (!e[1]){
+          return e[1];
         } else if ("object" === typeof e[1]) {
           return getData(e[1], e[0]);
         } else {
