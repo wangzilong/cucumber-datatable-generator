@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const DEFAULT_JSON = '{\n  "id": 1,\n "name": "James",\n "client": {\n   "client_id" : 8900 \n  } \n}';
+const DEFAULT_JSON = '{\n  "id": 1,\n "name": "James",\n "client": {\n   "client_id" : 8900, \n   "account_holders": ["James", "Neo"] \n  } \n}';
 
 function App() {
   const [json, setJson] = useState<string | undefined>(DEFAULT_JSON);
@@ -50,7 +50,9 @@ function App() {
     } else {
       const h = Object.entries(j).map(e => {
         const header = parent ? `${parent}.${e[0]}` : e[0];
-        if ("object" === typeof e[1]) {
+        if (isArray(e[1])) {
+          return header;
+        } else if ("object" === typeof e[1]) {
           return getHeader(e[1], header);
         } else {
           return header;
@@ -68,7 +70,9 @@ function App() {
     } else {
       const h = Object.entries(j).map(e => {
         const header = parent ? `${parent}.${e[0]}` : e[0];
-        if ("object" === typeof e[1]) {
+        if (isArray(e[1])) {
+          return `<${header}>`;
+        } else if ("object" === typeof e[1]) {
           return getExample(e[1], header);
         } else {
           return `<${header}>`;
@@ -85,7 +89,10 @@ function App() {
       return undefined;
     } else {
       const h = Object.entries(j).map(e => {
-        if ("object" === typeof e[1]) {
+        if (isArray(e[1]) && e[1]) {
+          // @ts-ignore
+          return e[1]?.join(',');
+        } else if ("object" === typeof e[1]) {
           return getData(e[1], e[0]);
         } else {
           return e[1];
@@ -95,6 +102,10 @@ function App() {
         .join(" | ");
       return parent ? h : `| ${h} |`;
     }
+  }
+
+  const isArray = (a:any): boolean => {
+    return a instanceof Array;
   }
 
   const isJson = () => {
