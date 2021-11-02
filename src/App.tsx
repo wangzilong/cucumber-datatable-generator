@@ -9,10 +9,11 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const DEFAULT_JSON = '{\n "name": "James",\n "email": null,\n "client": {\n   "client_id" : 8900, \n   "account_holders": ["James", "Neo"],\n   "flags": null\n  } \n}';
-
+const DEFAULT_JSON = '{\n "name": "James",\n "email": null,\n "client": {\n   "client_id" : 8900, \n   "account_holders": ["James", "Neo"],\n   "fees": [{"fee_id": 1}, {"fee_id": 2}]\n  } \n}';
+const DEFAULT_ATTRIBUTES = ['fees'];
 function App() {
   const [json, setJson] = useState<string | undefined>(DEFAULT_JSON);
+  const [attributes, setAttributes] = useState<string[] | undefined>(DEFAULT_ATTRIBUTES);
   const [header, setHeader] = useState<string | undefined>();
   const [example, setExample] = useState<string | undefined>();
   const [data, setData] = useState<string | undefined>();
@@ -89,6 +90,11 @@ function App() {
       return undefined;
     } else {
       const h = Object.entries(j).map(e => {
+
+        // keep value as string
+        if (attributes && attributes?.includes(e[0])) {
+          return JSON.stringify(e[1]);
+        }
         if (isArray(e[1]) && e[1]) {
           // @ts-ignore
           return e[1]?.join(',');
@@ -147,7 +153,7 @@ function App() {
       </Box>
       <header className="App-header">
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={10}>
             <TextField
               id="tf-json-id"
               label="JSON"
@@ -159,6 +165,18 @@ function App() {
               onChange={e => setJson(e?.target?.value)}
               error={!!error}
               helperText={error}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              id="tf-node-keep-json-id"
+              label="Attributes whose value is String"
+              placeholder="[name, email]"
+              multiline
+              variant="outlined"
+              value={attributes}
+              style={{width: '100%'}}
+              onChange={e => setAttributes(e?.target?.value?.split(","))}
             />
           </Grid>
           <Grid item xs={12}>
