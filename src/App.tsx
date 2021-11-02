@@ -9,8 +9,22 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-const DEFAULT_JSON = '{\n "name": "James",\n "email": null,\n "client": {\n   "client_id" : 8900, \n   "account_holders": ["James", "Neo"],\n   "fees": [{"fee_id": 1}, {"fee_id": 2}]\n  } \n}';
-const DEFAULT_ATTRIBUTES = ['fees'];
+const DEFAULT_JSON = '{\n' +
+  ' "name": "James",\n' +
+  ' "email": null,\n' +
+  ' "client": {\n' +
+  '   "client_id" : 8900, \n' +
+  '   "user": {\n' +
+  '      "user_id": 12,\n' +
+  '      "user_name": "Z"\n' +
+  '   },\n' +
+  '   "account_holders": ["James", "Neo"],\n' +
+  '   "fees": [{"fee_id": 1}, {"fee_id": 2}]\n' +
+  '  } \n' +
+  '}';
+
+
+const DEFAULT_ATTRIBUTES = ['fees', 'user'];
 function App() {
   const [json, setJson] = useState<string | undefined>(DEFAULT_JSON);
   const [attributes, setAttributes] = useState<string[] | undefined>(DEFAULT_ATTRIBUTES);
@@ -51,6 +65,12 @@ function App() {
     } else {
       const h = Object.entries(j).map(e => {
         const header = parent ? `${parent}.${e[0]}` : e[0];
+
+        // keep value as string
+        if (attributes && attributes?.includes(e[0])) {
+          return header;
+        }
+
         if (isArray(e[1]) || !e[1] ) {
           return header;
         } else if ("object" === typeof e[1]) {
@@ -71,6 +91,11 @@ function App() {
     } else {
       const h = Object.entries(j).map(e => {
         const header = parent ? `${parent}.${e[0]}` : e[0];
+        // keep value as string
+        if (attributes && attributes?.includes(e[0])) {
+          return `<${header}>`;
+        }
+
         if (isArray(e[1]) || !e[1]) {
           return `<${header}>`;
         } else if ("object" === typeof e[1]) {
@@ -95,6 +120,7 @@ function App() {
         if (attributes && attributes?.includes(e[0])) {
           return JSON.stringify(e[1]);
         }
+
         if (isArray(e[1]) && e[1]) {
           // @ts-ignore
           return e[1]?.join(',');
