@@ -72,6 +72,7 @@ function App() {
       setError("Invalid");
     }else {
       setError(undefined);
+      setHeaders(keys(JSON.parse(json)));
     }
   }, [json]);
 
