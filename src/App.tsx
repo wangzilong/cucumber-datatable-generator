@@ -235,7 +235,7 @@ function App() {
               </Grid>
               <Grid item xs={4}>
                 <Grid item xs={12}>
-                  <FormControl sx={{ m: 1, width: 300 }}>
+                  <FormControl sx={{ m: 1, width: '100%' }}>
                     <InputLabel id="tf-node-keep-json-id">Value as JSON</InputLabel>
                     <Select
                       labelId="Skips-multiple-checkbox-label"
@@ -257,7 +257,7 @@ function App() {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControl sx={{ m: 1, width: 300 }}>
+                  <FormControl sx={{ m: 1, width: '100%' }}>
                     <InputLabel id="Ignores-multiple-checkbox-label">Ignores</InputLabel>
                     <Select
                       labelId="Ignores-multiple-checkbox-label"
